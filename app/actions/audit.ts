@@ -1,6 +1,8 @@
 'use server';
 
-import { prisma } from '@/lib/db';
+
+import { logger } from '@/lib/server/logger';
+import { prisma } from '@/lib/server/db';
 import crypto from 'crypto';
 
 // ============================================================================
@@ -12,6 +14,7 @@ export interface AuditLogInput {
     entityType?: string;
     entityId?: string;
     description: string;
+    companyId?: string;
     performedById?: string;
     performedByName?: string;
     ipAddress?: string;
@@ -58,6 +61,7 @@ export async function addServerAuditLog(input: AuditLogInput): Promise<void> {
 
         await prisma.auditLog.create({
             data: {
+                companyId: input.companyId || 'SYSTEM',
                 actionType: input.actionType,
                 entityType: input.entityType,
                 entityId: input.entityId,
@@ -76,7 +80,7 @@ export async function addServerAuditLog(input: AuditLogInput): Promise<void> {
             },
         });
     } catch (error) {
-        console.error('Failed to add audit log:', error);
+        logger.error('Failed to add audit log:', error);
         // Don't throw - audit logging should not break the main operation
     }
 }

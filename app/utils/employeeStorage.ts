@@ -5,6 +5,7 @@
  * This module provides simple storage for individual employee work tracking.
  */
 
+import { logger } from '@/lib/server/logger';
 import { WorkSession, WorkStats, Lead, Activity } from '../types/shared';
 
 // ============================================================================
@@ -26,7 +27,7 @@ export function getEmployeeName(): string | null {
     if (typeof window === 'undefined') return null;
     return localStorage.getItem(EMPLOYEE_NAME_KEY);
   } catch (error) {
-    console.error('Error getting employee name from localStorage:', error);
+    logger.error('Error getting employee name from localStorage:', error);
     return null;
   }
 }
@@ -39,7 +40,7 @@ export function setEmployeeName(name: string): void {
     if (typeof window === 'undefined') return;
     localStorage.setItem(EMPLOYEE_NAME_KEY, name);
   } catch (error) {
-    console.error('Error saving employee name to localStorage:', error);
+    logger.error('Error saving employee name to localStorage:', error);
   }
 }
 
@@ -65,7 +66,7 @@ export function getWorkSessions(): WorkSession[] {
     if (!sessionsJson) return [];
     return JSON.parse(sessionsJson);
   } catch (error) {
-    console.error('Error loading work sessions from localStorage:', error);
+    logger.error('Error loading work sessions from localStorage:', error);
     return [];
   }
 }
@@ -78,7 +79,7 @@ export function saveWorkSessions(sessions: WorkSession[]): void {
     if (typeof window === 'undefined') return;
     localStorage.setItem(WORK_SESSIONS_KEY, JSON.stringify(sessions));
   } catch (error) {
-    console.error('Error saving work sessions to localStorage:', error);
+    logger.error('Error saving work sessions to localStorage:', error);
   }
 }
 
@@ -136,7 +137,7 @@ export function endWorkSession(sessionId: string): WorkSession | null {
     
     return session;
   } catch (error) {
-    console.error('Error ending work session:', error);
+    logger.error('Error ending work session:', error);
     return null;
   }
 }
@@ -149,7 +150,7 @@ export function getActiveWorkSession(leadId: string): WorkSession | null {
     const sessions = getWorkSessions();
     return sessions.find(s => s.leadId === leadId && !s.endTime) || null;
   } catch (error) {
-    console.error('Error getting active work session:', error);
+    logger.error('Error getting active work session:', error);
     return null;
   }
 }
@@ -225,7 +226,7 @@ export function calculateWorkStats(startDate: Date, endDate: Date, leads: Lead[]
     });
     
   } catch (error) {
-    console.error('Error calculating work stats:', error);
+    logger.error('Error calculating work stats:', error);
   }
   
   return stats;

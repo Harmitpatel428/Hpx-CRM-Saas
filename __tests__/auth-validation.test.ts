@@ -8,9 +8,9 @@
  */
 
 import { describe, test, expect, beforeAll } from 'vitest';
-import { prisma } from '@/lib/db';
-import { hashPassword } from '@/lib/auth';
-import { loginSchema, signupSchema, formatValidationError } from '@/lib/validations/auth';
+import { prisma } from '@/lib/server/db';
+import { hashPassword } from '@/lib/server/auth';
+import { loginSchema, signupSchema, formatValidationError } from '@/lib/shared/validations/auth';
 
 // ============================================================================
 // Schema-level validation tests (no DB, no network)

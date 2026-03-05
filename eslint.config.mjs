@@ -39,7 +39,18 @@ const eslintConfig = [
       'react/forbid-dom-props': 'off',
       'react/no-inline-styles': 'off',
       '@next/next/no-css-tags': 'off',
-      'css-modules/no-unused-class': 'off'
+      'css-modules/no-unused-class': 'off',
+      "no-restricted-imports": [
+        "error",
+        {
+          "patterns": [
+            {
+              "group": ["@/lib/server/*", "*/lib/server/*"],
+              "message": "Server modules cannot be imported into client components."
+            }
+          ]
+        }
+      ]
     }
   },
   // Specific override for LeadTable component to allow react-window style prop

@@ -1,5 +1,5 @@
 import { describe, test, expect, vi, beforeEach } from 'vitest';
-import { loginRateLimiter, RedisRateLimiter } from '@/lib/rateLimiter';
+import { loginRateLimiter, RedisRateLimiter } from '@/lib/server/rateLimiter';
 import { Redis } from '@upstash/redis';
 
 // Note: Testing environment variables for UPSTASH_REDIS_REST_URL/TOKEN

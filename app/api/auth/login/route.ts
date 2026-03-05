@@ -5,17 +5,18 @@
  * password comparison, or failedAttempts increment.
  */
 
+import { logger } from '@/lib/server/logger';
 import { NextRequest, NextResponse } from 'next/server';
-import { prisma } from '@/lib/db';
+import { prisma } from '@/lib/server/db';
 import {
     verifyPassword,
     createSession,
     isAccountLocked,
     recordFailedLoginAttempt,
     resetFailedLoginAttempts,
-} from '@/lib/auth';
-import { loginSchema, formatValidationError } from '@/lib/validations/auth';
-import { loginRateLimiter } from '@/lib/rateLimiter';
+} from '@/lib/server/auth';
+import { loginSchema, formatValidationError } from '@/lib/shared/validations/auth';
+import { loginRateLimiter } from '@/lib/server/rateLimiter';
 
 export async function POST(request: NextRequest) {
     try {
@@ -126,7 +127,7 @@ export async function POST(request: NextRequest) {
             { status: 200 }
         );
     } catch (error) {
-        console.error('Login route error:', error);
+        logger.error('Login route error:', error);
         return NextResponse.json(
             { error: 'Internal server error', message: 'An unexpected error occurred' },
             { status: 500 }
