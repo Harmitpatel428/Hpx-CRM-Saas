@@ -4,7 +4,7 @@
  * Central authority for all permission keys, role defaults, and resolution logic.
  */
 
-import { logger } from '@/lib/server/logger';
+import { logger } from '@/lib/client/logger';
 import { UserRole } from '../types/processTypes';
 
 // ============================================================================

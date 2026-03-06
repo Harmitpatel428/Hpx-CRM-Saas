@@ -3,7 +3,7 @@
  * Provides structured error recovery for various failure scenarios
  */
 
-import { logger } from '@/lib/server/logger';
+import { logger } from '@/lib/client/logger';
 import { storageErrorLogger } from './storageErrorLogger';
 import { storageNotifications } from './storageNotifications';
 import { restoreFromBackup, hasBackup, repairCorruptedLeads, repairColumnConfig, getItem, setItem } from './storage';

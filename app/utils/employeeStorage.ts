@@ -5,7 +5,7 @@
  * This module provides simple storage for individual employee work tracking.
  */
 
-import { logger } from '@/lib/server/logger';
+import { logger } from '@/lib/client/logger';
 import { WorkSession, WorkStats, Lead, Activity } from '../types/shared';
 
 // ============================================================================
@@ -87,7 +87,7 @@ export function saveWorkSessions(sessions: WorkSession[]): void {
  * Generate a simple UUID for session IDs
  */
 function generateUUID(): string {
-  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
     const r = Math.random() * 16 | 0;
     const v = c === 'x' ? r : (r & 0x3 | 0x8);
     return v.toString(16);
@@ -106,11 +106,11 @@ export function startWorkSession(leadId: string, leadName: string): WorkSession 
     startTime: new Date().toISOString(),
     employeeName
   };
-  
+
   const sessions = getWorkSessions();
   sessions.push(newSession);
   saveWorkSessions(sessions);
-  
+
   return newSession;
 }
 
@@ -121,20 +121,20 @@ export function endWorkSession(sessionId: string): WorkSession | null {
   try {
     const sessions = getWorkSessions();
     const sessionIndex = sessions.findIndex(s => s.id === sessionId);
-    
+
     if (sessionIndex === -1) return null;
-    
+
     const session = sessions[sessionIndex];
     const endTime = new Date().toISOString();
     const startTime = new Date(session.startTime);
     const duration = Math.round((new Date(endTime).getTime() - startTime.getTime()) / 60000); // minutes
-    
+
     session.endTime = endTime;
     session.duration = duration;
-    
+
     sessions[sessionIndex] = session;
     saveWorkSessions(sessions);
-    
+
     return session;
   } catch (error) {
     logger.error('Error ending work session:', error);
@@ -164,7 +164,7 @@ export function getActiveWorkSession(leadId: string): WorkSession | null {
  */
 export function calculateWorkStats(startDate: Date, endDate: Date, leads: Lead[]): WorkStats {
   const employeeName = getEmployeeName() || '';
-  
+
   // Initialize stats
   const stats: WorkStats = {
     totalActivities: 0,
@@ -175,32 +175,32 @@ export function calculateWorkStats(startDate: Date, endDate: Date, leads: Lead[]
     periodStart: startDate.toISOString(),
     periodEnd: endDate.toISOString()
   };
-  
+
   try {
     const uniqueLeadIds = new Set<string>();
     let lastActivityTimestamp = 0;
-    
+
     // Process activities from all leads
     leads.forEach(lead => {
       if (!lead.activities) return;
-      
+
       lead.activities.forEach((activity: Activity) => {
         const activityDate = new Date(activity.timestamp);
-        
+
         // Check if activity is in date range and by current employee
         if (activityDate >= startDate && activityDate <= endDate) {
           // Filter by employee name if available
           if (activity.employeeName && activity.employeeName !== employeeName) {
             return;
           }
-          
+
           stats.totalActivities++;
           uniqueLeadIds.add(activity.leadId);
-          
+
           // Count by type
           const type = activity.activityType || 'other';
           stats.activitiesByType[type] = (stats.activitiesByType[type] || 0) + 1;
-          
+
           // Track last activity date
           if (activityDate.getTime() > lastActivityTimestamp) {
             lastActivityTimestamp = activityDate.getTime();
@@ -209,14 +209,14 @@ export function calculateWorkStats(startDate: Date, endDate: Date, leads: Lead[]
         }
       });
     });
-    
+
     stats.totalLeadsTouched = uniqueLeadIds.size;
-    
+
     // Calculate total time from work sessions
     const sessions = getWorkSessions();
     sessions.forEach(session => {
       const sessionStart = new Date(session.startTime);
-      
+
       // Check if session is in date range and by current employee
       if (sessionStart >= startDate && sessionStart <= endDate && session.employeeName === employeeName) {
         if (session.duration) {
@@ -224,11 +224,11 @@ export function calculateWorkStats(startDate: Date, endDate: Date, leads: Lead[]
         }
       }
     });
-    
+
   } catch (error) {
     logger.error('Error calculating work stats:', error);
   }
-  
+
   return stats;
 }
 

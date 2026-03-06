@@ -1,4 +1,4 @@
-import { logger } from '@/lib/server/logger';
+import { logger } from '@/lib/client/logger';
 
 /**
  * Centralized UUID generation utility with crypto.randomUUID() polyfill

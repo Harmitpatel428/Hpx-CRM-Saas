@@ -1,5 +1,5 @@
 // Session Configuration
-import { logger } from '@/lib/server/logger';
+import { logger } from '@/lib/client/logger';
 import { debugLogger, DebugCategory } from './debugLogger';
 const SESSION_TIMEOUT_MS = 30 * 60 * 1000; // 30 minutes
 const SESSION_WARNING_MS = 5 * 60 * 1000; // 5 minutes before timeout

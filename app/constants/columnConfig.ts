@@ -1,4 +1,4 @@
-import { logger } from '@/lib/server/logger';
+import { logger } from '@/lib/client/logger';
 import { Lead } from '../types/shared';
 
 // Column order for display - defines the sequence of columns in the table

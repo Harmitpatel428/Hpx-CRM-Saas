@@ -5,7 +5,7 @@
  * during rapid user interactions like typing in search inputs.
  */
 
-import { logger } from '@/lib/server/logger';
+import { logger } from '@/lib/client/logger';
 import { useState, useEffect, useRef, useCallback, DependencyList } from 'react';
 
 /**

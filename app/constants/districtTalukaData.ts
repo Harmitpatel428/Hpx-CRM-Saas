@@ -1,4 +1,4 @@
-import { logger } from '@/lib/server/logger';
+import { logger } from '@/lib/client/logger';
 // District-Taluka-Category mapping data for Gujarat
 // Faithful transcription from the 5 reference tables
 

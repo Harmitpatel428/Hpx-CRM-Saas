@@ -6,7 +6,7 @@
  * when working with dynamic lead properties.
  */
 
-import { logger } from '@/lib/server/logger';
+import { logger } from '@/lib/client/logger';
 import type { Lead, ColumnConfig } from './shared';
 
 /**

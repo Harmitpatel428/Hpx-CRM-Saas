@@ -5,7 +5,7 @@
  * before navigation occurs.
  */
 
-import { logger } from '@/lib/server/logger';
+import { logger } from '@/lib/client/logger';
 import { flushPendingSyncFor } from './storage';
 
 // Critical keys that must be flushed before navigation

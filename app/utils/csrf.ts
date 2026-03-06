@@ -1,5 +1,5 @@
 // CSRF Configuration
-import { logger } from '@/lib/server/logger';
+import { logger } from '@/lib/client/logger';
 import { debugLogger, DebugCategory } from './debugLogger';
 
 const CSRF_TOKEN_KEY = '_csrf_token';

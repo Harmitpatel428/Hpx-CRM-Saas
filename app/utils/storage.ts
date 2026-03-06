@@ -8,7 +8,7 @@
  */
 
 // Import encryption utilities
-import { logger } from '@/lib/server/logger';
+import { logger } from '@/lib/client/logger';
 import { isSensitiveKey, encryptData, decryptData, hasMasterKey } from './encryption';
 import { logStorageError, logQuotaExceeded, logEncryptionError, logDecryptionError, logValidationError, ErrorSeverity, ErrorCategory } from './storageErrorLogger';
 import type { Lead } from '../types/shared';

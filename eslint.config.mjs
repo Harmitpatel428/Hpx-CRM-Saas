@@ -53,6 +53,21 @@ const eslintConfig = [
       ]
     }
   },
+  {
+    files: [
+      "app/api/**",
+      "app/actions/**",
+      "app/lib/**",
+      "lib/server/**",
+      "__tests__/**",
+      "scripts/**",
+      "create-admin.ts",
+      "vitest.setup.ts"
+    ],
+    rules: {
+      "no-restricted-imports": "off"
+    }
+  },
   // Specific override for LeadTable component to allow react-window style prop
   {
     files: ['app/components/LeadTable.tsx'],

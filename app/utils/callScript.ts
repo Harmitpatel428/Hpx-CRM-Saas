@@ -1,4 +1,4 @@
-import { logger } from '@/lib/server/logger';
+import { logger } from '@/lib/client/logger';
 import type { Lead } from '../types/shared';
 
 export const PER_LEAD_KEY_PREFIX = 'customCallScript:';
