@@ -12,7 +12,7 @@ import { z } from 'zod';
 // ============================================================================
 
 export const loginSchema = z.object({
-    email: z
+    identifier: z
         .string({ message: 'Email or Username is required' })
         .min(1, { message: 'Email or Username is required' })
         .max(255, { message: 'Input must not exceed 255 characters' }),

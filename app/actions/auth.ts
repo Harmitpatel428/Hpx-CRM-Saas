@@ -40,10 +40,10 @@ export interface AuthResult {
 /**
  * Server action to log in a user.
  */
-export async function loginAction(email: string, password: string): Promise<AuthResult> {
+export async function loginAction(identifier: string, password: string): Promise<AuthResult> {
     try {
         // ✅ Zod validation BEFORE any DB access, password check, or failedAttempts
-        const parsed = loginSchema.safeParse({ email, password });
+        const parsed = loginSchema.safeParse({ identifier, password });
         if (!parsed.success) {
             return {
                 success: false,
@@ -58,12 +58,12 @@ export async function loginAction(email: string, password: string): Promise<Auth
         // ✅ FIXED: Find user by email or username (globally unique across company)
         let user;
         try {
-            const identifier = email.toLowerCase();
+            const lowerIdentifier = identifier.toLowerCase();
             user = await prisma.user.findFirstOrThrow({
                 where: {
                     OR: [
-                        { email: identifier },
-                        { username: { equals: identifier, mode: 'insensitive' } }
+                        { email: lowerIdentifier },
+                        { username: { equals: lowerIdentifier, mode: 'insensitive' } }
                     ],
                     isActive: true,
                 },
@@ -78,12 +78,12 @@ export async function loginAction(email: string, password: string): Promise<Auth
             await addServerAuditLog({
                 actionType: 'USER_LOGIN_FAILED',
                 entityType: 'user',
-                description: `Failed login attempt for email "${email}" - User not found or account inactive`,
+                description: `Failed login attempt for identifier "${identifier}" - User not found or account inactive`,
                 ipAddress,
                 userAgent,
-                metadata: { reason: 'user_not_found', attemptedEmail: email },
+                metadata: { reason: 'user_not_found', attemptedIdentifier: identifier },
             });
-            return { success: false, message: 'Invalid email or password' };
+            return { success: false, message: 'Invalid identifier or password' };
         }
 
         // Check if account is locked

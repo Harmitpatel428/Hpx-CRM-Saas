@@ -58,16 +58,17 @@ export async function POST(request: NextRequest) {
             );
         }
 
-        const { email, password } = parsed.data;
+        const { identifier, password } = parsed.data;
 
         // ── Step 2: Database lookup ─────────────────────────────────────
         let user;
         try {
+            const lowerIdentifier = identifier.toLowerCase();
             user = await prisma.user.findFirstOrThrow({
                 where: {
                     OR: [
-                        { email: email.toLowerCase() },
-                        { username: email.toLowerCase() },
+                        { email: lowerIdentifier },
+                        { username: lowerIdentifier },
                     ],
                     isActive: true,
                 },
@@ -79,7 +80,7 @@ export async function POST(request: NextRequest) {
 
         if (!user) {
             return NextResponse.json(
-                { error: 'Authentication failed', message: 'Invalid email or password' },
+                { error: 'Authentication failed', message: 'Invalid identifier or password' },
                 { status: 401 }
             );
         }
@@ -100,7 +101,7 @@ export async function POST(request: NextRequest) {
         if (!isValid) {
             await recordFailedLoginAttempt(user.id);
             return NextResponse.json(
-                { error: 'Authentication failed', message: 'Invalid email or password' },
+                { error: 'Authentication failed', message: 'Invalid identifier or password' },
                 { status: 401 }
             );
         }
@@ -134,3 +135,7 @@ export async function POST(request: NextRequest) {
         );
     }
 }
+
+// Force dynamic behavior to ensure we aren't returning a cached static version
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
